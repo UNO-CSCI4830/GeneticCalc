@@ -5,6 +5,8 @@ from PySide6.QtCore import QUrl
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQuick import QQuickView
 
+from backend import CrossBackend
+
 QML_DIR = Path(__file__).resolve().parent / "qml"
 
 def main() -> int:
@@ -13,7 +15,12 @@ def main() -> int:
     view.setTitle("Genetic Cross Calculator")
     view.setResizeMode(QQuickView.ResizeMode.SizeRootObjectToView)
     view.engine().addImportPath(str(QML_DIR))
-    view.setSource(QUrl.fromLocalFile(str(QML_DIR / "gencalcuiv2.qml")))
+
+
+    backend = CrossBackend()
+    view.rootContext().setContextProperty("backend", backend)
+
+    view.setSource(QUrl.fromLocalFile(str(QML_DIR / "gencalcuiv3.qml")))
 
     if view.status() == QQuickView.Status.Error:
         for err in view.errors():
